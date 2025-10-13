@@ -1,2 +1,2 @@
 # myFlix-client
-Frontend of the movie application.
+A React-based movie application frontend built with Parcel bundler.
