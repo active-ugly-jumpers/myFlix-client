@@ -10,11 +10,11 @@ export const LoginView = ({ onLoggedIn }) => {
         event.preventDefault();
 
         const data = {
-            access: username,
-            secret: password
+            username: username,
+            password: password
         };
 
-        fetch("YOUR_API_URL/login", {
+        fetch("https://arcane-movies-f00164225bec.herokuapp.com/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -54,8 +54,7 @@ export const LoginView = ({ onLoggedIn }) => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    minLength={6}
-                    pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$"
+                    minLength={8}
                 />
             </label>
             <button type="submit">
