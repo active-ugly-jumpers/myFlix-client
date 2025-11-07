@@ -110,17 +110,16 @@ export const MainView = () => {
                 </Col>
             ) : (
                 <>
-                    <Col xs={12}>
+                    <Col xs={12} className="d-flex justify-content-end my-3">
                         <Button
                             variant="outline-secondary"
                             onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}
-                            className="mb-3"
                         >
                             Logout
                         </Button>
                     </Col>
                     {movies.map((movie) => (
-                        <Col xs={12} sm={6} md={4} lg={3} key={movie.id} className="mb-4">
+                        <Col xs={6} sm={6} md={4} lg={3} key={movie.id} className="mb-4">
                             <MovieCard
                                 movie={movie}
                                 onMovieClick={(newSelectedMovie) => {
