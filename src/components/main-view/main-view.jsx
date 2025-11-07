@@ -85,13 +85,14 @@ export const MainView = () => {
                 </Col>
             ) : selectedMovie ? (
                 <Col>
-                    <Button
-                        variant="outline-secondary"
-                        onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}
-                        className="mb-3"
-                    >
-                        Logout
-                    </Button>
+                    <div className="text-end my-3">
+                        <Button
+                            variant="outline-secondary"
+                            onClick={() => { setUser(null); setToken(null); localStorage.clear(); }}
+                        >
+                            Logout
+                        </Button>
+                    </div>
                     <MovieView
                         movie={selectedMovie}
                         onBackClick={() => setSelectedMovie(null)}
