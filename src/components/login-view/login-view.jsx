@@ -1,9 +1,7 @@
-import React from "react";
 import { useState } from "react";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
-import Alert from 'react-bootstrap/Alert';
 
 export const LoginView = ({ onLoggedIn }) => {
     const [username, setUsername] = useState("");

@@ -1,7 +1,12 @@
-$color: steelblue;
-
-.my-flix {
-  color: $color;
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/fonts/Inter.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
+$font-family-base: 'Inter', sans-serif;
+$body-bg: #f0f0f0;
+$primary: #36403a;
 
 @import '~bootstrap/scss/bootstrap.scss';
