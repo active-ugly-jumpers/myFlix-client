@@ -1,30 +1,79 @@
+import React from "react";
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Badge from 'react-bootstrap/Badge';
+
 export const MovieView = ({ movie, onBackClick }) => {
+    const handleImageError = (e) => {
+        e.target.src = 'https://placehold.co/300x450?text=No+Image';
+    };
+
     return (
-        <div>
-            <div>
-                <img src={movie.image} />
-            </div>
-            <div>
-                <span>Title: </span>
-                <span>{movie.title}</span>
-            </div>
-            <div>
-                <span>Year: </span>
-                <span>{movie.year}</span>
-            </div>
-            <div>
-                <span>Description: </span>
-                <span>{movie.description}</span>
-            </div>
-            <div>
-                <span>Genre: </span>
-                <span>{movie.genre}</span>
-            </div>
-            <div>
-                <span>Director: </span>
-                <span>{movie.director}</span>
-            </div>
-            <button onClick={onBackClick}>Back</button>
-        </div>
+        <Row>
+            {/* Movie Poster */}
+            <Col md={4} lg={3}>
+                <Card className="h-100">
+                    <Card.Img
+                        variant="top"
+                        src={movie.image}
+                        alt={movie.title}
+                        onError={handleImageError}
+                        // style={{ height: '500px', objectFit: 'cover' }}
+                    />
+                </Card>
+            </Col>
+
+            {/* Movie Details */}
+            <Col md={8} lg={9}>
+                <Card className="h-100">
+                    <Card.Body className="d-flex flex-column">
+                        {/* Header with title and year */}
+                        <div className="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <Card.Title as="h1" className="mb-2">
+                                    {movie.title}
+                                </Card.Title>
+                                <Badge bg="secondary" className="me-2">
+                                    {movie.year}
+                                </Badge>
+                                <Badge bg="primary">
+                                    {movie.genre}
+                                </Badge>
+                            </div>
+                            {movie.featured && (
+                                <Badge bg="warning" text="dark">
+                                    Featured
+                                </Badge>
+                            )}
+                        </div>
+
+                        {/* Description */}
+                        <Card.Text as="div" className="mb-4">
+                            <h5 className="text-muted mb-2">Synopsis</h5>
+                            <p className="lead">{movie.description}</p>
+                        </Card.Text>
+
+                        {/* Director Info */}
+                        <Card.Text as="div" className="mb-4">
+                            <h6 className="text-muted mb-1">Directed by</h6>
+                            <span className="h5">{movie.director}</span>
+                        </Card.Text>
+
+                        {/* Back Button */}
+                        <div className="mt-auto">
+                            <Button 
+                                variant="outline-primary" 
+                                onClick={onBackClick}
+                                size="lg"
+                            >
+                                ← Back to Movies
+                            </Button>
+                        </div>
+                    </Card.Body>
+                </Card>
+            </Col>
+        </Row>
     );
 };
