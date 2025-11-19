@@ -1,14 +1,21 @@
-import React from "react";
+import { useParams, Link } from 'react-router';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 
-export const MovieView = ({ movie, onBackClick }) => {
+export const MovieView = ({ movies }) => {
     const handleImageError = (e) => {
         e.target.src = 'https://placehold.co/300x450?text=No+Image';
     };
+
+    const { movieId } = useParams();
+    const movie = movies.find(m => m.id === movieId);
+
+    if (!movie) {
+        return <div>Movie not found</div>;
+    }
 
     return (
         <Row>
@@ -20,7 +27,7 @@ export const MovieView = ({ movie, onBackClick }) => {
                         src={movie.image}
                         alt={movie.title}
                         onError={handleImageError}
-                        // style={{ height: '500px', objectFit: 'cover' }}
+                    // style={{ height: '500px', objectFit: 'cover' }}
                     />
                 </Card>
             </Col>
@@ -63,9 +70,10 @@ export const MovieView = ({ movie, onBackClick }) => {
 
                         {/* Back Button */}
                         <div className="mt-auto">
-                            <Button 
-                                variant="outline-primary" 
-                                onClick={onBackClick}
+                            <Button
+                                as={Link}
+                                to="/movies"
+                                variant="outline-primary"
                                 size="lg"
                             >
                                 ← Back to Movies
