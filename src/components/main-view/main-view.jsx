@@ -3,6 +3,7 @@ import { MovieCard } from "../movie-card/movie-card";
 import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -15,8 +16,6 @@ export const MainView = () => {
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [movies, setMovies] = useState([]);
-    const [selectedMovie, setSelectedMovie] = useState(null);
-    const [showSignup, setShowSignup] = useState(false);
 
     // seEffect ALWAYS runs (but conditionally executes inside)
     useEffect(() => {
@@ -47,9 +46,16 @@ export const MainView = () => {
             });
     }, [token]);
 
+    const handleLogout = () => {
+        setUser(null);
+        setToken(null);
+        localStorage.clear();
+    };
+
     return (
         <BrowserRouter>
-            <Row className="justify-content-md-center">
+            <NavigationBar user={user} onLoggedOut={handleLogout} />
+            <Row className="justify-content-md-center mt-4">
                 <Routes>
                     <Route
                         path="/signup"
@@ -87,14 +93,6 @@ export const MainView = () => {
                                 <Navigate to="/login" />
                             ) : (
                                 <Col>
-                                    <div className="text-end my-3">
-                                        <Button
-                                            variant="outline-secondary"
-                                            onClick={handleLogout}
-                                        >
-                                            Logout
-                                        </Button>
-                                    </div>
                                     <MovieView movies={movies} />
                                 </Col>
                             )
@@ -107,25 +105,10 @@ export const MainView = () => {
                                 <Navigate to="/login" />
                             ) : movies.length === 0 ? (
                                 <Col className="text-center">
-                                    <Button
-                                        variant="outline-secondary"
-                                        onClick={handleLogout}
-                                        className="mb-3"
-                                    >
-                                        Logout
-                                    </Button>
                                     <div>The list is empty!</div>
                                 </Col>
                             ) : (
                                 <>
-                                    <Col xs={12} className="d-flex justify-content-end my-3">
-                                        <Button
-                                            variant="outline-secondary"
-                                            onClick={handleLogout}
-                                        >
-                                            Logout
-                                        </Button>
-                                    </Col>
                                     {movies.map((movie) => (
                                         <Col xs={6} sm={6} md={4} lg={3} key={movie.id} className="mb-4">
                                             <MovieCard movie={movie} />
