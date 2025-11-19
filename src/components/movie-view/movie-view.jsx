@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, Link } from 'react-router';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -5,7 +6,9 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 
-export const MovieView = ({ movies }) => {
+export const MovieView = ({ movies, user, token, onUserUpdate }) => {
+    const [userFavorites, setUserFavorites] = useState(user.favoriteMovies || []);
+
     const handleImageError = (e) => {
         e.target.src = 'https://placehold.co/300x450?text=No+Image';
     };
@@ -16,6 +19,35 @@ export const MovieView = ({ movies }) => {
     if (!movie) {
         return <div>Movie not found</div>;
     }
+
+    const isFavorite = userFavorites.includes(movie.id);
+
+    const handleToggleFavorite = async () => {
+        const method = isFavorite ? 'DELETE' : 'PUT';
+
+        const response = await fetch(`https://arcane-movies-f00164225bec.herokuapp.com/users/${user.username}/movies/${movie.id}`, {
+            method: method,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (response.ok) {
+            let updatedFavorites;
+            if (isFavorite) {
+                updatedFavorites = userFavorites.filter(id => id !== movie.id);
+            } else {
+                updatedFavorites = [...userFavorites, movie.id];
+            }
+            
+            setUserFavorites(updatedFavorites);
+            
+            // Update the user object in MainView
+            const updatedUser = { ...user, favoriteMovies: updatedFavorites };
+            onUserUpdate(updatedUser);
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+        }
+    };
 
     return (
         <Row>
@@ -68,8 +100,8 @@ export const MovieView = ({ movies }) => {
                             <span className="h5">{movie.director}</span>
                         </Card.Text>
 
-                        {/* Back Button */}
-                        <div className="mt-auto">
+                        {/* Action Buttons */}
+                        <div className="mt-auto d-flex justify-content-between">
                             <Button
                                 as={Link}
                                 to="/movies"
@@ -77,6 +109,14 @@ export const MovieView = ({ movies }) => {
                                 size="lg"
                             >
                                 ← Back to Movies
+                            </Button>
+                            
+                            <Button 
+                                variant={isFavorite ? "danger" : "success"}
+                                size="lg"
+                                onClick={handleToggleFavorite}
+                            >
+                                {isFavorite ? "❤️ Remove from Fav" : "🤍 Add to Fav"}
                             </Button>
                         </div>
                     </Card.Body>
