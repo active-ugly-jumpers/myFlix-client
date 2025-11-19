@@ -4,9 +4,9 @@ import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { NavigationBar } from "../navigation-bar/navigation-bar";
+import { ProfileView } from "../profile-view/profile-view";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 
 export const MainView = () => {
@@ -47,6 +47,16 @@ export const MainView = () => {
     }, [token]);
 
     const handleLogout = () => {
+        setUser(null);
+        setToken(null);
+        localStorage.clear();
+    };
+
+    const handleUserUpdate = (updatedUser) => {
+        setUser(updatedUser);
+    };
+
+    const handleUserDelete = () => {
         setUser(null);
         setToken(null);
         localStorage.clear();
@@ -115,6 +125,22 @@ export const MainView = () => {
                                         </Col>
                                     ))}
                                 </>
+                            )
+                        }
+                    />
+                    <Route
+                        path="/profile"
+                        element={
+                            !user ? (
+                                <Navigate to="/login" />
+                            ) : (
+                                <ProfileView
+                                    user={user}
+                                    token={token}
+                                    movies={movies}
+                                    onUserUpdate={handleUserUpdate}
+                                    onUserDelete={handleUserDelete}
+                                />
                             )
                         }
                     />
