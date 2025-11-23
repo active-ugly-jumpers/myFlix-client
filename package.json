@@ -11,10 +11,11 @@
     "url": "git+https://github.com/active-ugly-jumpers/myFlix-client.git"
   },
   "license": "ISC",
-  "author": "",
-  "type": "commonjs",
+  "author": "pp",
   "scripts": {
     "start": "parcel src/index.html",
+    "build": "parcel build src/index.html",
+    "eject": "react-scripts eject",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -25,7 +26,7 @@
     "react-router": "^7.9.6"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.9.3",
-    "parcel": "^2.9.3"
+    "@parcel/transformer-sass": "^2.16.1",
+    "parcel": "^2.16.1"
   }
 }
