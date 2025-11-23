@@ -7,6 +7,7 @@ import { NavigationBar } from "../navigation-bar/navigation-bar";
 import { ProfileView } from "../profile-view/profile-view";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
 
 export const MainView = () => {
@@ -16,6 +17,7 @@ export const MainView = () => {
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [movies, setMovies] = useState([]);
+    const [filter, setFilter] = useState("");
 
     // seEffect ALWAYS runs (but conditionally executes inside)
     useEffect(() => {
@@ -62,6 +64,10 @@ export const MainView = () => {
         localStorage.clear();
     };
 
+    const filteredMovies = movies.filter(movie =>
+        movie.title.toLowerCase().includes(filter.toLowerCase())
+    );
+
     return (
         <BrowserRouter>
             <NavigationBar user={user} onLoggedOut={handleLogout} />
@@ -103,10 +109,10 @@ export const MainView = () => {
                                 <Navigate to="/login" />
                             ) : (
                                 <Col>
-                                    <MovieView 
-                                        movies={movies} 
-                                        user={user} 
-                                        token={token} 
+                                    <MovieView
+                                        movies={movies}
+                                        user={user}
+                                        token={token}
                                         onUserUpdate={handleUserUpdate}
                                     />
                                 </Col>
@@ -118,17 +124,29 @@ export const MainView = () => {
                         element={
                             !user ? (
                                 <Navigate to="/login" />
-                            ) : movies.length === 0 ? (
-                                <Col className="text-center">
-                                    <div>The list is empty!</div>
-                                </Col>
                             ) : (
                                 <>
-                                    {movies.map((movie) => (
-                                        <Col xs={6} sm={6} md={4} lg={3} key={movie.id} className="mb-4">
-                                            <MovieCard movie={movie} />
+                                    <Col xs={12} className="mb-4">
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Search movies..."
+                                            value={filter}
+                                            onChange={(e) => setFilter(e.target.value)}
+                                        />
+                                    </Col>
+                                    {filteredMovies.length === 0 ? (
+                                        <Col className="text-center">
+                                            <div>{filter ? "No movies match your search!" : "The list is empty!"}</div>
                                         </Col>
-                                    ))}
+                                    ) : (
+                                        <>
+                                            {filteredMovies.map((movie) => (
+                                                <Col xs={6} sm={6} md={4} lg={3} key={movie.id} className="mb-4">
+                                                    <MovieCard movie={movie} />
+                                                </Col>
+                                            ))}
+                                        </>
+                                    )}
                                 </>
                             )
                         }
