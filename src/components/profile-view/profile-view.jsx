@@ -18,23 +18,19 @@ export const ProfileView = ({ user, token, movies, onUserUpdate, onUserDelete })
     }, [user, token]);
 
     const fetchUserInfo = async () => {
-        const response = await fetch('https://arcane-movies-f00164225bec.herokuapp.com/users', {
+        if (!user || !user.username) return;
+        const response = await fetch(`https://arcane-movies-f00164225bec.herokuapp.com/users/${encodeURIComponent(user.username)}`, {
             headers: { Authorization: `Bearer ${token}` }
         });
-        
         if (response.ok) {
-            const users = await response.json();
-            const currentUser = users.find(u => u.username === user.username);
-            
-            if (currentUser) {
-                setUserInfo(currentUser);
-                setFormData({
-                    username: currentUser.username,
-                    email: currentUser.email,
-                    password: '',
-                    birthday: currentUser.birthday ? new Date(currentUser.birthday).toISOString().split('T')[0] : ''
-                });
-            }
+            const currentUser = await response.json();
+            setUserInfo(currentUser);
+            setFormData({
+                username: currentUser.username,
+                email: currentUser.email,
+                password: '',
+                birthday: currentUser.birthday ? new Date(currentUser.birthday).toISOString().split('T')[0] : ''
+            });
         }
     };
 
